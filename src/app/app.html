@@ -1,10 +1,10 @@
 
 <header class="cabecalho">
+
   <div class="marca">
-    <span class="icone-marca">✿</span>
     <div>
-      <h1>Estética & Bem-Estar</h1>
-      <p>Seu cuidado, nossa essência</p>
+      <h1>ESTÉTICA &amp; BEM-ESTAR</h1>
+      <p>SEU CUIDADO, NOSSA ESSÊNCIA</p>
     </div>
   </div>
 
@@ -13,115 +13,139 @@
     <a href="#produtos">Produtos</a>
     <a href="#servicos">Serviços</a>
   </nav>
+
 </header>
 
 <main>
+
+  <!-- CARROSSEL DE BANNERS -->
   <section class="destaque" id="inicio">
+
+    <img
+      class="imagem-banner"
+      [src]="bannerAtual().imagem"
+      [alt]="bannerAtual().titulo"
+    />
+
+    <div class="fundo-banner"></div>
+
+    <button
+      class="seta-banner seta-esquerda"
+      type="button"
+      aria-label="Banner anterior"
+      (click)="bannerAnterior()">
+      ‹
+    </button>
+
     <div class="texto-destaque">
-      <span class="etiqueta">CUIDE-SE TODOS OS DIAS</span>
-      <h2>Seu momento de<br />bem-estar começa aqui.</h2>
-      <p>
-        Descubra produtos e serviços pensados para cuidar de você
-        com carinho, qualidade e tranquilidade.
-      </p>
-      <a class="botao" href="#produtos">Conheça nosso catálogo</a>
+      <span class="etiqueta">
+        {{ bannerAtual().etiqueta }}
+      </span>
+
+      <h2>{{ bannerAtual().titulo }}</h2>
+
+      <p>{{ bannerAtual().descricao }}</p>
+
+      <a class="botao" href="#produtos">
+        Conheça nosso catálogo
+      </a>
     </div>
+
+    <button
+      class="seta-banner seta-direita"
+      type="button"
+      aria-label="Próximo banner"
+      (click)="proximoBanner()">
+      ›
+    </button>
+
   </section>
 
+  <!-- INDICADORES DO CARROSSEL -->
+  <div class="indicadores">
+    @for (banner of banners; track banner.titulo; let i = $index) {
+      <button
+        type="button"
+        [class.ativo]="indiceBanner() === i"
+        [attr.aria-label]="'Mostrar banner ' + (i + 1)"
+        (click)="selecionarBanner(i)">
+      </button>
+    }
+  </div>
+
+  <!-- CATÁLOGO -->
   <section class="catalogo" id="produtos">
+
     <div class="titulo-secao">
       <span>NOSSO CATÁLOGO</span>
       <h2>Produtos e serviços</h2>
       <p>Encontre opções para sua rotina de autocuidado.</p>
     </div>
 
+    <!-- PESQUISA -->
     <div class="barra-pesquisa">
       <input
         type="search"
         placeholder="Pesquisar produtos e serviços..."
         aria-label="Pesquisar produtos e serviços"
+        [value]="termoPesquisa()"
+        (input)="atualizarPesquisa($event)"
       />
-      <button type="button">Pesquisar</button>
     </div>
 
+    <!-- CATEGORIAS -->
     <div class="categorias">
-      <button type="button">Todos</button>
-      <button type="button">Cuidados com a Pele</button>
-      <button type="button">Higiene Pessoal</button>
-      <button type="button">Cosméticos</button>
-      <button type="button">Serviços Estéticos</button>
-      <button type="button">Bem-Estar</button>
+      @for (categoria of categorias; track categoria) {
+        <button
+          type="button"
+          [class.ativa]="categoriaSelecionada() === categoria"
+          (click)="selecionarCategoria(categoria)">
+          {{ categoria }}
+        </button>
+      }
     </div>
 
+    <!-- PRODUTOS FILTRADOS -->
     <div class="grade-produtos">
-      <article class="produto">
-        <div class="imagem-produto">🌸</div>
-        <span class="tipo">PRODUTO</span>
-        <h3>Hidratante Facial</h3>
-        <p>Creme hidratante para cuidados diários com a pele.</p>
-        <strong>R$ 85,00</strong>
-      </article>
 
-      <article class="produto">
-        <div class="imagem-produto">☀️</div>
-        <span class="tipo">PRODUTO</span>
-        <h3>Protetor Solar FPS 50</h3>
-        <p>Proteção solar facial para sua rotina diária.</p>
-        <strong>R$ 60,00</strong>
-      </article>
+      @for (produto of produtosFiltrados(); track produto.id) {
 
-      <article class="produto">
-        <div class="imagem-produto">💧</div>
-        <span class="tipo">PRODUTO</span>
-        <h3>Sérum Facial</h3>
-        <p>Sérum facial para complementar seus cuidados.</p>
-        <strong>R$ 75,00</strong>
-      </article>
+        <article class="produto">
 
-      <article class="produto">
-        <div class="imagem-produto">🧼</div>
-        <span class="tipo">PRODUTO</span>
-        <h3>Sabonete Facial</h3>
-        <p>Sabonete líquido para limpeza facial.</p>
-        <strong>R$ 35,00</strong>
-      </article>
+          <div class="imagem-produto">
+            {{ produto.icone }}
+          </div>
 
-      <article class="produto">
-        <div class="imagem-produto">🌿</div>
-        <span class="tipo">PRODUTO</span>
-        <h3>Óleo Corporal</h3>
-        <p>Óleo corporal para hidratação e cuidado com a pele.</p>
-        <strong>R$ 55,00</strong>
-      </article>
+          <span class="tipo">
+            {{ produto.tipo }}
+          </span>
 
-      <article class="produto">
-        <div class="imagem-produto">✨</div>
-        <span class="tipo">SERVIÇO</span>
-        <h3>Limpeza de Pele</h3>
-        <p>Serviço estético de limpeza facial.</p>
-        <strong>R$ 120,00</strong>
-      </article>
+          <h3>{{ produto.nome }}</h3>
 
-      <article class="produto">
-        <div class="imagem-produto">🪷</div>
-        <span class="tipo">SERVIÇO</span>
-        <h3>Hidratação Facial</h3>
-        <p>Serviço estético de hidratação facial.</p>
-        <strong>R$ 100,00</strong>
-      </article>
+          <p>{{ produto.descricao }}</p>
 
-      <article class="produto">
-        <div class="imagem-produto">🌼</div>
-        <span class="tipo">PRODUTO</span>
-        <h3>Máscara Facial</h3>
-        <p>Máscara facial para cuidados cosméticos.</p>
-        <strong>R$ 40,00</strong>
-        <small>Consulte a disponibilidade</small>
-      </article>
+          <strong>
+            {{ formatarPreco(produto.preco) }}
+          </strong>
+
+          @if (produto.disponibilidade) {
+            <small>{{ produto.disponibilidade }}</small>
+          }
+
+        </article>
+
+      } @empty {
+        <p class="sem-produtos">
+          Nenhum produto ou serviço encontrado.
+        </p>
+      }
+
     </div>
+
   </section>
+
 </main>
 
 <footer>
-  <p>Estética & Bem-Estar · Cuidar de você faz bem.</p>
+  <p>Estética &amp; Bem-Estar · Cuidar de você faz bem.</p>
 </footer>
