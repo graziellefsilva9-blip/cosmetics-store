@@ -1,0 +1,114 @@
+
+    <section class="cadastro-cliente">
+      <h2>Cadastro de cliente</h2>
+      <p>Preencha os dados para cadastrar um cliente.</p>
+
+      <form #formulario="ngForm" (ngSubmit)="salvar(formulario)">
+        <label>
+          Nome
+          <input
+            type="text"
+            name="nome"
+            [(ngModel)]="cliente.nome"
+            required
+          />
+        </label>
+
+        <label>
+          CPF
+          <input
+            type="text"
+            name="cpf"
+            [(ngModel)]="cliente.cpf"
+            inputmode="numeric"
+            pattern="[0-9]{11}"
+            maxlength="11"
+            required
+          />
+        </label>
+
+        <label>
+          Data de nascimento
+          <input
+            type="date"
+            name="dataNascimento"
+            [(ngModel)]="cliente.dataNascimento"
+            required
+          />
+        </label>
+
+        <label>
+          Sexo
+          <select name="sexo" [(ngModel)]="cliente.sexo" required>
+            <option value="">Selecione</option>
+            <option value="F">Feminino</option>
+            <option value="M">Masculino</option>
+            <option value="O">Outro</option>
+          </select>
+        </label>
+
+        <label>
+          E-mail
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="cliente.email"
+            required
+          />
+        </label>
+
+        <label>
+          Telefone
+          <input
+            type="tel"
+            name="telefone"
+            [(ngModel)]="cliente.telefone"
+            inputmode="numeric"
+            pattern="[0-9]{10,11}"
+            required
+          />
+        </label>
+
+        <h3>Endereço</h3>
+
+        <label>
+          CEP
+          <input
+            type="text"
+            name="cep"
+            [(ngModel)]="cliente.endereco.cep"
+            inputmode="numeric"
+            pattern="[0-9]{8}"
+            maxlength="8"
+            required
+          />
+        </label>
+
+        <label>
+          Número
+          <input
+            type="text"
+            name="numero"
+            [(ngModel)]="cliente.endereco.numero"
+            required
+          />
+        </label>
+
+        <label>
+          Complemento
+          <input
+            type="text"
+            name="complemento"
+            [(ngModel)]="cliente.endereco.complemento"
+          />
+        </label>
+
+        <button type="submit" [disabled]="formulario.invalid || enviando">
+          {{ enviando ? 'Cadastrando...' : 'Cadastrar cliente' }}
+        </button>
+      </form>
+
+      @if (mensagem) {
+        <p role="status">{{ mensagem }}</p>
+      }
+    </section>

@@ -1,6 +1,7 @@
 
 import { Component, signal, computed } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { CadastroCliente } from './cadastro-cliente';
 
 interface Produto {
   id: number;
@@ -16,11 +17,22 @@ interface Produto {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet,  CadastroCliente],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
+
+
+  telaAtual = signal<'inicio' | 'cadastro'>('inicio');
+
+abrirCadastro() {
+  this.telaAtual.set('cadastro');
+}
+
+voltarInicio() {
+  this.telaAtual.set('inicio');
+}
 
   // BANNERS DO CARROSSEL
   banners = [
