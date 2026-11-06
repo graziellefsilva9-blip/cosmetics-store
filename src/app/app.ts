@@ -1,7 +1,7 @@
 
 import { Component, signal, computed } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { CadastroCliente } from './cadastro-cliente';
+import { CadastroCliente } from './loja/cadastro-cliente/cadastro-cliente';
+import { ListarClientes } from './administrativo/clientes/listar-clientes';
 
 interface Produto {
   id: number;
@@ -17,17 +17,22 @@ interface Produto {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,  CadastroCliente],
+  imports: [CadastroCliente, ListarClientes],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
 
 
-  telaAtual = signal<'inicio' | 'cadastro'>('inicio');
+  telaAtual = signal<'inicio' | 'cadastro' | 'clientes'>('inicio');
+
 
 abrirCadastro() {
   this.telaAtual.set('cadastro');
+}
+
+abrirClientes() {
+  this.telaAtual.set('clientes');
 }
 
 voltarInicio() {

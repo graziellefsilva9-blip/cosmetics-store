@@ -1,4 +1,6 @@
+
 @if (telaAtual() === 'inicio') {
+
   <header class="cabecalho">
     <div class="marca">
       <div>
@@ -11,12 +13,18 @@
       <a href="#inicio">Início</a>
       <a href="#produtos">Produtos</a>
       <a href="#servicos">Serviços</a>
-      <button type="button" (click)="abrirCadastro()">Cadastro de cliente</button>
+
+      <button type="button" (click)="abrirCadastro()">
+        Cadastro de cliente
+      </button>
+
+      <button type="button" (click)="abrirClientes()">
+        Clientes cadastrados
+      </button>
     </nav>
   </header>
 
   <main>
-    <!-- CARROSSEL DE BANNERS -->
     <section class="destaque" id="inicio">
       <img
         class="imagem-banner"
@@ -36,9 +44,14 @@
 
       <div class="texto-destaque">
         <span class="etiqueta">{{ bannerAtual().etiqueta }}</span>
+
         <h2>{{ bannerAtual().titulo }}</h2>
+
         <p>{{ bannerAtual().descricao }}</p>
-        <a class="botao" href="#produtos">Conheça nosso catálogo</a>
+
+        <a class="botao" href="#produtos">
+          Conheça nosso catálogo
+        </a>
       </div>
 
       <button
@@ -50,7 +63,6 @@
       </button>
     </section>
 
-    <!-- INDICADORES DO CARROSSEL -->
     <div class="indicadores">
       @for (banner of banners; track banner.titulo; let i = $index) {
         <button
@@ -62,11 +74,12 @@
       }
     </div>
 
-    <!-- CATÁLOGO -->
     <section class="catalogo" id="produtos">
       <div class="titulo-secao">
         <span>NOSSO CATÁLOGO</span>
+
         <h2>Produtos e serviços</h2>
+
         <p>Encontre opções para sua rotina de autocuidado.</p>
       </div>
 
@@ -94,10 +107,16 @@
       <div class="grade-produtos">
         @for (produto of produtosFiltrados(); track produto.id) {
           <article class="produto">
-            <div class="imagem-produto">{{ produto.icone }}</div>
+            <div class="imagem-produto">
+              {{ produto.icone }}
+            </div>
+
             <span class="tipo">{{ produto.tipo }}</span>
+
             <h3>{{ produto.nome }}</h3>
+
             <p>{{ produto.descricao }}</p>
+
             <strong>{{ formatarPreco(produto.preco) }}</strong>
 
             @if (produto.disponibilidade) {
@@ -105,7 +124,9 @@
             }
           </article>
         } @empty {
-          <p class="sem-produtos">Nenhum produto ou serviço encontrado.</p>
+          <p class="sem-produtos">
+            Nenhum produto ou serviço encontrado.
+          </p>
         }
       </div>
     </section>
@@ -114,7 +135,25 @@
   <footer>
     <p>Estética &amp; Bem-Estar · Cuidar de você faz bem.</p>
   </footer>
-} @else {
-  <app-cadastro-cliente />
-  <button type="button" (click)="voltarInicio()">Voltar ao início</button>
+
+} @else if (telaAtual() === 'cadastro') {
+
+  <app-cadastro-cliente></app-cadastro-cliente>
+
+  <div class="voltar-container">
+    <button type="button" (click)="voltarInicio()">
+      Voltar ao início
+    </button>
+  </div>
+
+} @else if (telaAtual() === 'clientes') {
+
+  <app-listar-clientes></app-listar-clientes>
+
+  <div class="voltar-container">
+    <button type="button" (click)="voltarInicio()">
+      Voltar ao início
+    </button>
+  </div>
+
 }

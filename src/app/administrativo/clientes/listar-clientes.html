@@ -1,0 +1,59 @@
+
+<div class="clientes-container">
+
+    <h2>Clientes cadastrados</h2>
+    <p>Consulte os clientes registrados na Estética & Bem-Estar.</p>
+  
+    <div *ngIf="carregando" class="mensagem">
+      Carregando clientes...
+    </div>
+  
+    <div *ngIf="erro" class="mensagem erro">
+      {{ erro }}
+    </div>
+  
+    <div *ngIf="!carregando && clientes.length === 0 && !erro"
+         class="mensagem">
+      Nenhum cliente cadastrado.
+    </div>
+  
+    <div class="tabela-container" *ngIf="clientes.length > 0">
+  
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>E-mail</th>
+            <th>Telefone</th>
+            <th>Situação</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+          <tr *ngFor="let cliente of clientes">
+            <td>{{ cliente.idPessoa }}</td>
+            <td>{{ cliente.nome }}</td>
+            <td>{{ cliente.cpf }}</td>
+            <td>{{ cliente.email }}</td>
+            <td>{{ cliente.telefone }}</td>
+            <td>{{ cliente.ativoPessoa === 'S' ? 'Ativo' : 'Inativo' }}</td>
+            <td>
+              <button type="button" class="btn-editar">
+                Editar
+              </button>
+  
+              <button type="button" class="btn-excluir">
+                Excluir
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+    </div>
+  
+  </div>
+  
