@@ -27,17 +27,37 @@ export class ListarClientes implements OnInit {
   listarClientes(): void {
     this.carregando = true;
     this.erro = '';
+    this.mensagem = '';
 
     this.pessoaService.listar().subscribe({
+
       next: (resposta) => {
-        this.clientes = resposta;
+        console.log('RESPOSTA DA API:', resposta);
+
+        if (Array.isArray(resposta)) {
+          this.clientes = resposta;
+          console.log('QUANTIDADE DE CLIENTES:', resposta.length);
+
+          if (resposta.length === 0) {
+            this.mensagem = 'Nenhum cliente cadastrado.';
+          }
+        } else {
+          this.clientes = [];
+          this.erro = 'A API retornou um formato de dados inesperado.';
+          console.error('Formato inesperado:', resposta);
+        }
+
         this.carregando = false;
       },
+
       error: (erro) => {
-        console.error('Erro ao listar clientes:', erro);
-        this.erro = 'Não foi possível carregar os clientes.';
+        console.error('ERRO AO LISTAR CLIENTES:', erro);
+        console.error('DETALHES DA RESPOSTA:', erro.error);
+
+        this.erro = 'Não foi possível carregar os clientes. Verifique a conexão com a API.';
         this.carregando = false;
       }
+
     });
   }
 }

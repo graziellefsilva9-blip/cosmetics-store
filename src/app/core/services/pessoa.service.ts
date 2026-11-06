@@ -24,4 +24,7 @@ export class PessoaService {
   cadastrar(pessoa: Pessoa): Observable<Pessoa> {
     return this.http.post<Pessoa>(this.apiUrl, pessoa);
   }
+
+  atualizar(id: number, pessoa: Pessoa): Observable<Pessoa> {return this.http.put<Pessoa>(`${this.apiUrl}/${id}`, pessoa);
+  }
 }
