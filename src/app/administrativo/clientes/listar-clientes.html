@@ -1,60 +1,113 @@
 
 <div class="clientes-container">
 
-    <h2>Clientes cadastrados</h2>
-    <p>Consulte os clientes registrados na Estética & Bem-Estar.</p>
+  <h2>Clientes cadastrados</h2>
+  <p>Consulte os clientes registrados na Estética & Bem-Estar.</p>
 
+  <!-- FORMULÁRIO DE EDIÇÃO -->
+  <div *ngIf="clienteEditando" class="form-edicao">
+
+    <h3>Editar cliente</h3>
+
+    <label>Nome:</label>
+    <input type="text" [(ngModel)]="clienteEditando.nome" name="nome">
+
+    <label>CPF:</label>
+    <input type="number" [(ngModel)]="clienteEditando.cpf" name="cpf">
+
+    <label>Data de nascimento:</label>
+    <input type="date" [(ngModel)]="clienteEditando.dataNascimento" name="dataNascimento">
+
+    <label>Sexo:</label>
+    <input type="text" [(ngModel)]="clienteEditando.sexo" name="sexo">
+
+    <label>E-mail:</label>
+    <input type="email" [(ngModel)]="clienteEditando.email" name="email">
+
+    <label>Telefone:</label>
+    <input type="number" [(ngModel)]="clienteEditando.telefone" name="telefone">
+
+    <label>CEP:</label>
+    <input type="text" [(ngModel)]="clienteEditando.enderecos[0].cep" name="cep">
+
+    <label>Número:</label>
+    <input type="text" [(ngModel)]="clienteEditando.enderecos[0].numero" name="numero">
+
+    <label>Complemento:</label>
+    <input type="text" [(ngModel)]="clienteEditando.enderecos[0].complemento" name="complemento">
+
+    <button
+    type="button"
+    class="btn-salvar"
+    (click)="salvarEdicao()">
+    Salvar alterações
+  </button>
   
-    <div *ngIf="carregando" class="mensagem">
-      Carregando clientes...
-    </div>
-  
-    <div *ngIf="erro" class="mensagem erro">
-      {{ erro }}
-    </div>
-  
-    <div *ngIf="!carregando && clientes.length === 0 && !erro"
-         class="mensagem">
-      Nenhum cliente cadastrado.
-    </div>
-  
-    <div class="tabela-container" *ngIf="clientes.length > 0">
-  
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>CPF</th>
-            <th>E-mail</th>
-            <th>Telefone</th>
-            <th>Situação</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-  
-        <tbody>
-          <tr *ngFor="let cliente of clientes">
-            <td>{{ cliente.idPessoa }}</td>
-            <td>{{ cliente.nome }}</td>
-            <td>{{ cliente.cpf }}</td>
-            <td>{{ cliente.email }}</td>
-            <td>{{ cliente.telefone }}</td>
-            <td>{{ cliente.ativoPessoa === 'S' ? 'Ativo' : 'Inativo' }}</td>
-            <td>
-              <button type="button" class="btn-editar">
-                Editar
-              </button>
-  
-              <button type="button" class="btn-excluir">
-                Excluir
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-  
-    </div>
-  
+  <button
+    type="button"
+    class="btn-cancelar"
+    (click)="cancelarEdicao()">
+    Cancelar
+  </button>
+
   </div>
-  
+
+  <div *ngIf="carregando" class="mensagem">
+    Carregando clientes...
+  </div>
+
+  <div *ngIf="erro" class="mensagem erro">
+    {{ erro }}
+  </div>
+
+  <div *ngIf="!carregando && clientes.length === 0 && !erro"
+       class="mensagem">
+    Nenhum cliente cadastrado.
+  </div>
+
+  <div class="tabela-container" *ngIf="clientes.length > 0">
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>CPF</th>
+          <th>E-mail</th>
+          <th>Telefone</th>
+          <th>Situação</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let cliente of clientes">
+          <td>{{ cliente.idPessoa }}</td>
+          <td>{{ cliente.nome }}</td>
+          <td>{{ cliente.cpf }}</td>
+          <td>{{ cliente.email }}</td>
+          <td>{{ cliente.telefone }}</td>
+          <td>{{ cliente.ativoPessoa === 'S' ? 'Ativo' : 'Inativo' }}</td>
+
+          <td>
+            <button
+              type="button"
+              class="btn-editar"
+              (click)="editar(cliente.idPessoa!)">
+              Editar
+            </button>
+
+            <button
+  type="button"
+  class="btn-excluir"
+  (click)="excluir(cliente.idPessoa!)">
+  Excluir
+</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

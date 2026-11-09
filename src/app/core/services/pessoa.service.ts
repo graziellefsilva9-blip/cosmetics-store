@@ -17,8 +17,8 @@ export class PessoaService {
     return this.http.get<Pessoa[]>(this.apiUrl);
   }
 
-  buscarPorId(id: number): Observable<Pessoa> {
-    return this.http.get<Pessoa>(`${this.apiUrl}/${id}`);
+  buscarPorId(id: number): Observable<Pessoa[]> {
+    return this.http.get<Pessoa[]>(`${this.apiUrl}/${id}`);
   }
 
   cadastrar(pessoa: Pessoa): Observable<Pessoa> {
@@ -26,5 +26,9 @@ export class PessoaService {
   }
 
   atualizar(id: number, pessoa: Pessoa): Observable<Pessoa> {return this.http.put<Pessoa>(`${this.apiUrl}/${id}`, pessoa);
+  }
+
+  excluir(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
