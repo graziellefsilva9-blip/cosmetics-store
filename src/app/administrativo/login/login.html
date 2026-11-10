@@ -1,0 +1,46 @@
+
+<main class="pagina-login">
+  <section class="card-login">
+    <a routerLink="/" class="logo">Estética & Bem-Estar</a>
+
+    <div class="icone-login">♙</div>
+
+    <span class="subtitulo">ÁREA RESTRITA</span>
+    <h1>Painel Administrativo</h1>
+    <p class="descricao">
+      Entre com seus dados para acessar o gerenciamento da loja.
+    </p>
+
+    <form (submit)="$event.preventDefault(); entrar()">
+      <label for="email">E-mail</label>
+      <input
+        id="email"
+        type="email"
+        placeholder="Digite seu e-mail"
+        [value]="email()"
+        (input)="email.set($any($event.target).value)"
+        required
+      >
+
+      <label for="senha">Senha</label>
+      <input
+        id="senha"
+        type="password"
+        placeholder="Digite sua senha"
+        [value]="senha()"
+        (input)="senha.set($any($event.target).value)"
+        required
+      >
+
+      <button type="submit">Entrar no painel</button>
+    </form>
+
+    @if (mensagem()) {
+      <div class="mensagem" [class.erro]="tipoMensagem() === 'erro'">
+        {{ mensagem() }}
+      </div>
+    }
+
+    <a routerLink="/" class="voltar">Voltar para a loja</a>
+  </section>
+</main>

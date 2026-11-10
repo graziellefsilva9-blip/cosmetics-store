@@ -1,1 +1,155 @@
-<p>meus-pedidos works!</p>
+
+<header class="topo">
+  <a routerLink="/" class="logo">Estética & Bem-Estar</a>
+
+  <nav>
+    <a routerLink="/">Início</a>
+    <a routerLink="/catalogo">Produtos e Serviços</a>
+    <a routerLink="/carrinho">Carrinho</a>
+    <a routerLink="/meus-pedidos">Meus Pedidos</a>
+  </nav>
+</header>
+
+<main class="container">
+  <section class="titulo-pagina">
+    <span class="subtitulo">ACOMPANHE SUAS COMPRAS</span>
+    <h1>Meus pedidos</h1>
+    <p>Consulte seus pedidos e acompanhe cada etapa.</p>
+  </section>
+
+  <section class="consulta">
+    <label for="clienteId">Identificação do cliente</label>
+
+    <div class="campo-consulta">
+      <input
+        id="clienteId"
+        type="number"
+        min="1"
+        placeholder="Digite seu ID de cliente"
+        [value]="clienteId()"
+        (input)="clienteId.set($any($event.target).value)"
+        (keyup.enter)="consultarPedidos()"
+      >
+
+      <button type="button" (click)="consultarPedidos()">
+        Consultar pedidos
+      </button>
+    </div>
+
+    <p class="aviso">
+      Informe seu ID de cliente para consultar somente os seus pedidos.
+    </p>
+  </section>
+
+  @if (mensagem()) {
+    <div class="mensagem">
+      {{ mensagem() }}
+    </div>
+  }
+
+  @if (pedidos().length > 0) {
+    <section class="lista-pedidos">
+      <div class="cabecalho-lista">
+        <h2>Seus pedidos</h2>
+        <span>{{ totalPedidos() }} pedido(s) encontrado(s)</span>
+      </div>
+
+      @for (pedido of pedidos(); track pedido.id) {
+        <article class="pedido-card">
+          <div class="pedido-info">
+            <span class="numero">Pedido #{{ pedido.id }}</span>
+            <span class="data">
+              {{ formatarData(pedido.data) }}
+            </span>
+          </div>
+
+          <div class="pedido-total">
+            <span>Valor total</span>
+            <strong>{{ formatarPreco(pedido.total) }}</strong>
+          </div>
+
+          <div class="pedido-status">
+            <span [class]="'status ' + classeStatus(pedido.status)">
+              {{ pedido.status }}
+            </span>
+          </div>
+
+          <button
+            type="button"
+            class="botao-detalhes"
+            (click)="verDetalhes(pedido)"
+          >
+            Ver detalhes
+          </button>
+        </article>
+      }
+    </section>
+  }
+
+  @if (pedidoSelecionado(); as pedido) {
+    <section class="detalhes">
+      <div class="detalhes-cabecalho">
+        <div>
+          <span class="subtitulo">INFORMAÇÕES DA COMPRA</span>
+          <h2>Pedido #{{ pedido.id }}</h2>
+        </div>
+
+        <button
+          type="button"
+          class="fechar"
+          (click)="fecharDetalhes()"
+          aria-label="Fechar detalhes"
+        >
+          ×
+        </button>
+      </div>
+
+      <p>
+        <strong>Data:</strong>
+        {{ formatarData(pedido.data) }}
+      </p>
+
+      <p>
+        <strong>Situação:</strong>
+        {{ pedido.status }}
+      </p>
+
+      <h3>Itens do pedido</h3>
+
+      <div class="itens-pedido">
+        @for (item of pedido.itens; track $index) {
+          <div class="item-linha">
+            <div>
+              <strong>{{ item.nome }}</strong>
+              <span>Quantidade: {{ item.quantidade }}</span>
+            </div>
+
+            <strong>
+              {{ formatarPreco(item.preco * item.quantidade) }}
+            </strong>
+          </div>
+        }
+      </div>
+
+      <div class="total-detalhes">
+        <span>Total do pedido</span>
+        <strong>{{ formatarPreco(pedido.total) }}</strong>
+      </div>
+    </section>
+  }
+
+  @if (pesquisou() && pedidos().length === 0) {
+    <section class="vazio">
+      <span class="icone-vazio">♡</span>
+      <h2>Nenhum pedido encontrado</h2>
+      <p>Confira o ID informado e tente novamente.</p>
+      <a routerLink="/catalogo">
+        Conhecer produtos e serviços
+      </a>
+    </section>
+  }
+</main>
+
+<footer class="rodape">
+  <p>Estética & Bem-Estar · Cuidado e carinho em cada detalhe.</p>
+</footer>

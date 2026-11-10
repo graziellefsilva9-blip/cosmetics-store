@@ -75,31 +75,45 @@ html {
   letter-spacing: 1.5px;
 }
 
+/* MENU */
+
 nav {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 28px;
+  gap: 20px;
 }
 
-nav a {
+/* LINKS E BOTÕES */
+
+nav a,
+nav button {
   position: relative;
+  padding: 8px 0;
+  border: none;
+  background: transparent;
   color: #222222;
   text-decoration: none;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
+  cursor: pointer;
   transition: color 0.3s;
 }
 
-nav a:hover {
+nav a:hover,
+nav button:hover {
   color: #c8103d;
 }
 
-nav a::after {
+/* EFEITO INFERIOR */
+
+nav a::after,
+nav button::after {
   content: "";
   position: absolute;
-  bottom: -8px;
+  bottom: 0;
   left: 0;
   width: 0;
   height: 2px;
@@ -107,9 +121,20 @@ nav a::after {
   transition: width 0.3s;
 }
 
-nav a:hover::after {
+nav a:hover::after,
+nav button:hover::after {
   width: 100%;
 }
+
+/* FOCO PARA ACESSIBILIDADE */
+
+nav a:focus-visible,
+nav button:focus-visible {
+  outline: 2px solid #c8103d;
+  outline-offset: 5px;
+}
+
+
 
 /* =====================================
    BANNER / CARROSSEL
@@ -528,4 +553,79 @@ footer {
     font-size: 11px;
   }
 }
+
+
+/* =====================================
+   CORREÇÃO DOS BOTÕES DO MENU
+===================================== */
+
+.cabecalho nav button {
+  padding: 10px 16px;
+  border: 1px solid #c8103d;
+  border-radius: 4px;
+  background: #c8103d;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cabecalho nav button:hover {
+  background: #ffffff;
+  color: #c8103d;
+}
+
+.cabecalho nav button:focus-visible {
+  outline: 2px solid #c8103d;
+  outline-offset: 3px;
+}
+
+
+/* BOTÃO ADICIONAR AO CARRINHO */
+
+.botao-adicionar {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  border: 1px solid #c8103d;
+  border-radius: 4px;
+  background: #c8103d;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.botao-adicionar:hover {
+  background: #ffffff;
+  color: #c8103d;
+}
+
+/* BOTÃO VOLTAR */
+
+.voltar-container {
+  display: flex;
+  justify-content: center;
+  padding: 25px;
+}
+
+.voltar-container button {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 4px;
+  background: #c8103d;
+  color: #ffffff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.voltar-container button:hover {
+  background: #a50c32;
+}
+
 

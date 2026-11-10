@@ -1,1 +1,124 @@
-<p>carrinho works!</p>
+
+<section class="carrinho">
+
+  <header class="cabecalho-carrinho">
+    <span class="subtitulo">ESTÉTICA & BEM-ESTAR</span>
+    <h1>Meu Carrinho</h1>
+    <p>Confira seus produtos e serviços selecionados.</p>
+  </header>
+
+  @if (mensagem()) {
+    <div class="mensagem" [class.erro]="tipoMensagem() === 'erro'">
+      {{ mensagem() }}
+    </div>
+  }
+
+  @if (itens().length > 0) {
+
+    <div class="resumo-itens">
+      {{ totalItens() }} item(ns) no carrinho
+    </div>
+
+    <div class="lista-carrinho">
+
+      @for (item of itens(); track item.id + item.tipo) {
+
+        <article class="item-carrinho">
+
+          <div class="icone-item">
+            {{ item.icone }}
+          </div>
+
+          <div class="dados-item">
+            <span class="tipo-item">{{ item.tipo }}</span>
+            <h3>{{ item.nome }}</h3>
+            <p>{{ formatarPreco(item.preco) }} por unidade</p>
+          </div>
+
+          <div class="controle-quantidade">
+            <button
+              type="button"
+              (click)="diminuirQuantidade(item.id, item.tipo, item.quantidade)"
+              aria-label="Diminuir quantidade"
+            >−</button>
+
+            <input
+              type="number"
+              min="1"
+              [value]="item.quantidade"
+              (change)="atualizarQuantidade(item.id, item.tipo, $event)"
+            >
+
+            <button
+              type="button"
+              (click)="aumentarQuantidade(item.id, item.tipo, item.quantidade)"
+              aria-label="Aumentar quantidade"
+            >+</button>
+          </div>
+
+          <strong class="subtotal">
+            {{ formatarPreco(item.preco * item.quantidade) }}
+          </strong>
+
+          <button
+            type="button"
+            class="botao-remover"
+            (click)="removerItem(item.id, item.tipo)"
+          >
+            Remover
+          </button>
+
+        </article>
+
+      }
+
+    </div>
+
+    <div class="acoes-carrinho">
+      <button
+        type="button"
+        class="botao-limpar"
+        (click)="limparCarrinho()"
+      >
+        Limpar carrinho
+      </button>
+
+      <a routerLink="/catalogo" class="continuar-comprando">
+        Continuar comprando
+      </a>
+    </div>
+
+    <div class="resumo-compra">
+      <h2>Resumo do pedido</h2>
+
+      <div class="linha-resumo">
+        <span>Quantidade de itens</span>
+        <strong>{{ totalItens() }}</strong>
+      </div>
+
+      <div class="linha-total">
+        <span>Total</span>
+        <strong>{{ formatarPreco(valorTotal()) }}</strong>
+      </div>
+
+      <button
+        type="button"
+        class="botao-finalizar"
+        (click)="finalizarPedido()"
+      >
+        Confirmar pedido
+      </button>
+    </div>
+
+  } @else {
+
+    <div class="carrinho-vazio">
+      <span>🛍️</span>
+      <h2>Seu carrinho está vazio</h2>
+      <p>Explore nossos produtos e serviços e escolha seus favoritos.</p>
+      <a routerLink="/catalogo">Conhecer catálogo</a>
+    </div>
+
+  }
+
+</section>
