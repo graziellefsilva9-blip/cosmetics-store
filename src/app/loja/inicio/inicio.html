@@ -1,1 +1,120 @@
+<<<<<<< HEAD
 <router-outlet></router-outlet>
+=======
+
+<header class="cabecalho">
+  <div class="logo">
+    <span>Estética & Bem-Estar</span>
+    <small>Seu cuidado, nossa essência</small>
+  </div>
+
+  <nav>
+    <a href="#inicio">Início</a>
+    <a href="#catalogo">Produtos</a>
+    <a href="#catalogo">Serviços</a>
+    <a routerLink="/cadastro-cliente">Cadastre-se</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- BANNER PRINCIPAL -->
+  <section class="banner" id="inicio"
+    [style.background-image]="'linear-gradient(90deg, rgba(45,20,25,.75), rgba(45,20,25,.15)), url(' + bannerAtual().imagem + ')'">
+
+    <button class="seta anterior" (click)="bannerAnterior()">&#10094;</button>
+
+    <div class="banner-conteudo">
+      <span>{{ bannerAtual().etiqueta }}</span>
+      <h1>{{ bannerAtual().titulo }}</h1>
+      <p>{{ bannerAtual().descricao }}</p>
+      <a href="#catalogo" class="botao-banner">Conheça nosso catálogo</a>
+    </div>
+
+    <button class="seta proxima" (click)="proximoBanner()">&#10095;</button>
+
+    <div class="indicadores">
+      @for (banner of banners; track $index) {
+        <button
+          [class.ativo]="indiceBanner() === $index"
+          (click)="selecionarBanner($index)">
+        </button>
+      }
+    </div>
+  </section>
+
+  <!-- FAIXA PROMOCIONAL -->
+  <section class="faixa-promocional">
+    Frete grátis em compras selecionadas | Seu primeiro pedido merece um cuidado especial!
+  </section>
+
+  <!-- CATÁLOGO -->
+  <section class="catalogo" id="catalogo">
+
+    <div class="titulo-secao">
+      <span>DESCUBRA NOSSA SELEÇÃO</span>
+      <h2>Produtos e Serviços</h2>
+      <p>Tudo para cuidar de você com carinho.</p>
+    </div>
+
+    <!-- PESQUISA -->
+    <div class="campo-pesquisa">
+      <input
+        type="text"
+        placeholder="Pesquisar produtos ou serviços..."
+        (input)="atualizarPesquisa($event)">
+    </div>
+
+    <!-- CATEGORIAS -->
+    <div class="categorias">
+      @for (categoria of categorias; track categoria) {
+        <button
+          [class.selecionada]="categoriaSelecionada() === categoria"
+          (click)="selecionarCategoria(categoria)">
+          {{ categoria }}
+        </button>
+      }
+    </div>
+
+    <!-- PRODUTOS -->
+    <div class="grade-produtos">
+
+      @for (produto of produtosFiltrados(); track produto.id) {
+        <article class="card-produto">
+
+          <div class="produto-imagem">
+            <span>{{ produto.icone }}</span>
+          </div>
+
+          <div class="produto-info">
+            <span class="tipo">{{ produto.tipo }}</span>
+
+            <h3>{{ produto.nome }}</h3>
+
+            <p>{{ produto.descricao }}</p>
+
+            <strong>{{ formatarPreco(produto.preco) }}</strong>
+
+            @if (produto.disponibilidade) {
+              <small>{{ produto.disponibilidade }}</small>
+            }
+          </div>
+
+        </article>
+      } @empty {
+        <p class="sem-produtos">
+          Nenhum produto ou serviço encontrado.
+        </p>
+      }
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="rodape">
+  <h3>Estética & Bem-Estar</h3>
+  <p>Seu cuidado, nossa essência.</p>
+  <small>© 2026 Estética & Bem-Estar. Todos os direitos reservados.</small>
+</footer>
+>>>>>>> 8c95618d4de5acf9bf3db783489b7f92d316ffb9

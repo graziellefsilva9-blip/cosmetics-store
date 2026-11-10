@@ -1,0 +1,123 @@
+
+<div class="pagina">
+  <header class="cabecalho">
+    <h1>Funcionários</h1>
+    <p>Gerencie os funcionários da loja.</p>
+  </header>
+
+  <section class="painel">
+    <h2>{{ editando ? 'Editar funcionário' : 'Cadastrar funcionário' }}</h2>
+
+    <form (ngSubmit)="salvar()">
+      <div class="campo">
+        <label>Nome *</label>
+        <input
+          type="text"
+          name="nome"
+          [(ngModel)]="funcionario.nome"
+          placeholder="Nome completo"
+          required>
+      </div>
+
+      <div class="campo">
+        <label>CPF *</label>
+        <input
+          type="text"
+          name="cpf"
+          [(ngModel)]="funcionario.cpf"
+          placeholder="000.000.000-00"
+          required>
+      </div>
+
+      <div class="campo">
+        <label>E-mail *</label>
+        <input
+          type="email"
+          name="email"
+          [(ngModel)]="funcionario.email"
+          placeholder="email@exemplo.com"
+          required>
+      </div>
+
+      <div class="campo">
+        <label>Telefone</label>
+        <input
+          type="text"
+          name="telefone"
+          [(ngModel)]="funcionario.telefone"
+          placeholder="(00) 00000-0000">
+      </div>
+
+      <div class="campo">
+        <label>Cargo *</label>
+        <input
+          type="text"
+          name="cargo"
+          [(ngModel)]="funcionario.cargo"
+          placeholder="Ex.: Esteticista"
+          required>
+      </div>
+
+      <div class="acoes">
+        <button type="submit">
+          {{ editando ? 'Atualizar' : 'Cadastrar' }}
+        </button>
+
+        <button type="button" class="secundario" (click)="limpar()">
+          Limpar
+        </button>
+      </div>
+    </form>
+
+    <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
+  </section>
+
+  <section class="painel">
+    <h2>Funcionários cadastrados</h2>
+
+    <input
+      class="busca"
+      type="text"
+      name="busca"
+      [(ngModel)]="termoBusca"
+      placeholder="Buscar por nome, CPF ou cargo">
+
+    <div class="tabela-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>E-mail</th>
+            <th>Cargo</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let f of funcionariosFiltrados">
+            <td>{{ f.nome }}</td>
+            <td>{{ f.cpf }}</td>
+            <td>{{ f.email }}</td>
+            <td>{{ f.cargo }}</td>
+            <td>{{ f.ativo ? 'Ativo' : 'Inativo' }}</td>
+            <td class="botoes">
+              <button type="button" (click)="editar(f)">Editar</button>
+              <button
+                type="button"
+                class="secundario"
+                (click)="alterarStatus(f)">
+                {{ f.ativo ? 'Desativar' : 'Ativar' }}
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="funcionariosFiltrados.length === 0">
+            <td colspan="6">Nenhum funcionário encontrado.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

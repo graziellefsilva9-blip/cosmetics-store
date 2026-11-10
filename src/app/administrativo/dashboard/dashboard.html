@@ -1,0 +1,76 @@
+
+<header class="topo">
+  <a routerLink="/" class="logo">Estética & Bem-Estar</a>
+
+  <nav>
+    <a routerLink="/">Loja virtual</a>
+    <a routerLink="/login">Sair</a>
+  </nav>
+</header>
+
+<main class="container">
+  <section class="boas-vindas">
+    <div>
+      <span class="subtitulo">ÁREA ADMINISTRATIVA</span>
+      <h1>Dashboard</h1>
+      <p>Bem-vindo ao painel de gerenciamento da loja.</p>
+    </div>
+
+    <span class="data-atual">
+      Painel de controle
+    </span>
+  </section>
+
+  <section class="indicadores">
+    @for (item of indicadores(); track item.titulo) {
+      <a class="indicador-card" [routerLink]="item.rota">
+        <div class="indicador-topo">
+          <span class="indicador-icone">{{ item.icone }}</span>
+          <span class="indicador-valor">{{ item.valor }}</span>
+        </div>
+
+        <h2>{{ item.titulo }}</h2>
+        <p>{{ item.descricao }}</p>
+        <span class="ver-mais">Acessar →</span>
+      </a>
+    }
+  </section>
+
+  <section class="secao-atalhos">
+    <div class="secao-titulo">
+      <span class="subtitulo">GERENCIAMENTO</span>
+      <h2>Acesso rápido</h2>
+      <p>Selecione uma área para administrar.</p>
+    </div>
+
+    <div class="atalhos-grid">
+      @for (atalho of atalhos; track atalho.nome) {
+        <a class="atalho-card" [routerLink]="atalho.rota">
+          <span class="atalho-icone">{{ atalho.icone }}</span>
+
+          <div>
+            <h3>{{ atalho.nome }}</h3>
+            <p>{{ atalho.descricao }}</p>
+          </div>
+
+          <span class="seta">→</span>
+        </a>
+      }
+    </div>
+  </section>
+
+  <section class="aviso-dashboard">
+    <span>♡</span>
+    <div>
+      <strong>Estética & Bem-Estar</strong>
+      <p>
+        Acompanhe os cadastros, pedidos e movimentações
+        da sua loja em um só lugar.
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <p>Estética & Bem-Estar · Painel Administrativo</p>
+</footer>

@@ -1,0 +1,126 @@
+
+.pagina {
+  min-height: 100vh;
+  padding: 30px;
+  background: #fff8fa;
+  color: #49343d;
+}
+
+.cabecalho {
+  margin-bottom: 25px;
+}
+
+.cabecalho h1,
+.painel h2 {
+  color: #a83f68;
+}
+
+.resumo {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.card-resumo {
+  background: white;
+  padding: 22px;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.card-resumo h3 {
+  font-size: 15px;
+  color: #806b74;
+}
+
+.card-resumo strong {
+  font-size: 28px;
+  color: #ad456e;
+}
+
+.painel {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.consulta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+input, select {
+  padding: 11px;
+  border: 1px solid #e5cbd5;
+  border-radius: 7px;
+}
+
+.consulta input {
+  flex: 1;
+  min-width: 180px;
+}
+
+.filtro {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+button {
+  background: #ad456e;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+button.secundario {
+  background: #806b74;
+}
+
+button:hover {
+  opacity: 0.88;
+}
+
+.mensagem {
+  color: #a83f68;
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+.tabela-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 13px;
+  text-align: left;
+  border-bottom: 1px solid #f0e1e7;
+}
+
+th {
+  background: #f9eaf0;
+  color: #8e365b;
+}
+
+@media (max-width: 700px) {
+  .pagina {
+    padding: 15px;
+  }
+
+  .resumo {
+    grid-template-columns: 1fr;
+  }
+}

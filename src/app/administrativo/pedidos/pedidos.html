@@ -1,0 +1,174 @@
+
+<div class="pagina">
+  <header class="cabecalho">
+    <h1>Gerenciamento de Pedidos</h1>
+    <p>Consulte os pedidos e acompanhe suas situações.</p>
+  </header>
+
+  <section class="resumo">
+    <div class="card-resumo">
+      <h3>Total de pedidos</h3>
+      <strong>{{ totalPedidos }}</strong>
+    </div>
+
+    <div class="card-resumo">
+      <h3>Pedidos abertos</h3>
+      <strong>{{ pedidosAbertos }}</strong>
+    </div>
+
+    <div class="card-resumo">
+      <h3>Em processamento</h3>
+      <strong>{{ pedidosProcessando }}</strong>
+    </div>
+  </section>
+
+  <section class="painel">
+    <h2>Consultar pedido por ID</h2>
+
+    <div class="consulta">
+      <input
+        type="number"
+        name="idConsulta"
+        [(ngModel)]="idConsulta"
+        placeholder="Digite o ID do pedido">
+
+      <button type="button" (click)="consultarPorId()">
+        Consultar
+      </button>
+
+      <button
+        type="button"
+        class="secundario"
+        (click)="limparConsulta()">
+        Limpar
+      </button>
+    </div>
+
+    <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
+  </section>
+
+  <section class="painel" *ngIf="pedidoSelecionado as pedido">
+    <h2>Detalhes do pedido #{{ pedido.id }}</h2>
+
+    <p><strong>Cliente:</strong> {{ pedido.cliente }}</p>
+    <p><strong>Data:</strong> {{ pedido.data | date:'dd/MM/yyyy' }}</p>
+    <p><strong>Valor total:</strong> {{ pedido.valorTotal | currency:'BRL' }}</p>
+    <p><strong>Status:</strong> {{ pedido.status }}</p>
+
+    <h3>Itens do pedido</h3>
+
+    <div class="tabela-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Funcionário</th>
+            <th>Quantidade</th>
+            <th>Valor unitário</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of pedido.itens">
+            <td>{{ item.nome }}</td>
+            <td>{{ item.funcionario }}</td>
+            <td>{{ item.quantidade }}</td>
+            <td>{{ item.valorUnitario | currency:'BRL' }}</td>
+            <td>
+              {{ item.quantidade * item.valorUnitario | currency:'BRL' }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="painel">
+    <h2>Lista de pedidos</h2>
+
+    <div class="filtro">
+      <label for="filtroStatus">Filtrar por situação:</label>
+
+      <select
+        id="filtroStatus"
+        name="filtroStatus"
+        [(ngModel)]="filtroStatus">
+        <option value="Todos">Todos</option>
+        <option value="Aberto">Aberto</option>
+        <option value="Em processamento">Em processamento</option>
+        <option value="Concluído">Concluído</option>
+        <option value="Cancelado">Cancelado</option>
+      </select>
+    </div>
+
+    <div class="tabela-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Cliente</th>
+            <th>Data</th>
+            <th>Valor total</th>
+            <th>Status</th>
+            <th>Detalhes</th>
+            <th>Atualizar situação</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let pedido of pedidosFiltrados">
+            <td>#{{ pedido.id }}</td>
+            <td>{{ pedido.cliente }}</td>
+            <td>{{ pedido.data | date:'dd/MM/yyyy' }}</td>
+            <td>{{ pedido.valorTotal | currency:'BRL' }}</td>
+            <td>{{ pedido.status }}</td>
+
+            <td>
+              <button
+                type="button"
+                (click)="visualizar(pedido)">
+                Visualizar
+              </button>
+            </td>
+
+            <td>
+              <select
+                *ngIf="podeAlterarStatus(pedido)"
+                [ngModel]="pedido.status"
+                (ngModelChange)="atualizarStatus(pedido, $event)"
+                [name]="'status-' + pedido.id">
+
+                <option [value]="pedido.status">
+                  {{ pedido.status }}
+                </option>
+
+                <option
+                  *ngIf="pedido.status === 'Aberto'"
+                  value="Em processamento">
+                  Em processamento
+                </option>
+
+                <option
+                  *ngIf="pedido.status === 'Em processamento'"
+                  value="Concluído">
+                  Concluído
+                </option>
+
+                <option value="Cancelado">Cancelado</option>
+              </select>
+
+              <span *ngIf="!podeAlterarStatus(pedido)">
+                Finalizado
+              </span>
+            </td>
+          </tr>
+
+          <tr *ngIf="pedidosFiltrados.length === 0">
+            <td colspan="7">Nenhum pedido encontrado.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

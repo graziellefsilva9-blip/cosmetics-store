@@ -1,0 +1,105 @@
+
+<div class="pagina">
+  <header class="cabecalho">
+    <h1>Controle de Estoque</h1>
+    <p>Consulte os produtos e suas quantidades disponíveis.</p>
+  </header>
+
+  <section class="resumo">
+    <div class="card-resumo">
+      <h3>Produtos cadastrados</h3>
+      <strong>{{ totalProdutos }}</strong>
+    </div>
+
+    <div class="card-resumo">
+      <h3>Total de unidades</h3>
+      <strong>{{ totalUnidades }}</strong>
+    </div>
+
+    <div class="card-resumo">
+      <h3>Sem estoque</h3>
+      <strong>{{ produtosSemEstoque }}</strong>
+    </div>
+  </section>
+
+  <section class="painel">
+    <h2>Consultar estoque por ID</h2>
+
+    <div class="consulta">
+      <input
+        type="number"
+        name="idConsulta"
+        [(ngModel)]="idConsulta"
+        placeholder="Digite o ID do produto">
+
+      <button type="button" (click)="consultarPorId()">
+        Consultar
+      </button>
+
+      <button
+        type="button"
+        class="secundario"
+        (click)="limparConsulta()">
+        Limpar
+      </button>
+    </div>
+
+    <p class="mensagem" *ngIf="mensagem">{{ mensagem }}</p>
+
+    <div class="resultado" *ngIf="produtoEncontrado as produto">
+      <h3>{{ produto.nome }}</h3>
+      <p><strong>ID:</strong> {{ produto.id }}</p>
+      <p><strong>Descrição:</strong> {{ produto.descricao }}</p>
+      <p><strong>Categoria:</strong> {{ produto.categoria }}</p>
+      <p><strong>Quantidade:</strong> {{ produto.quantidade }}</p>
+      <p><strong>Status:</strong> {{ produto.ativo ? 'Ativo' : 'Inativo' }}</p>
+    </div>
+  </section>
+
+  <section class="painel">
+    <h2>Produtos em estoque</h2>
+
+    <input
+      class="busca"
+      type="text"
+      name="busca"
+      [(ngModel)]="busca"
+      placeholder="Pesquisar produto ou categoria">
+
+    <div class="tabela-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Produto</th>
+            <th>Categoria</th>
+            <th>Preço</th>
+            <th>Preço de venda</th>
+            <th>Quantidade</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let p of produtosFiltrados">
+            <td>{{ p.id }}</td>
+            <td>{{ p.nome }}</td>
+            <td>{{ p.categoria }}</td>
+            <td>{{ p.preco | currency:'BRL' }}</td>
+            <td>{{ p.precoVenda | currency:'BRL' }}</td>
+            <td>
+              <span [class.sem-estoque]="p.quantidade === 0">
+                {{ p.quantidade }}
+              </span>
+            </td>
+            <td>{{ p.ativo ? 'Ativo' : 'Inativo' }}</td>
+          </tr>
+
+          <tr *ngIf="produtosFiltrados.length === 0">
+            <td colspan="7">Nenhum produto encontrado.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

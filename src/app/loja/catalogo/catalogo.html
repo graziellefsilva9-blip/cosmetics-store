@@ -1,0 +1,235 @@
+
+<header class="cabecalho">
+
+  <div class="marca">
+    <h1>ESTÉTICA &amp; BEM-ESTAR</h1>
+    <p>SEU CUIDADO, NOSSA ESSÊNCIA</p>
+  </div>
+
+  <nav class="menu-cliente">
+    <a routerLink="/catalogo">Início</a>
+    <a routerLink="/catalogo">Produtos e serviços</a>
+    <a routerLink="/cadastro-cliente">Cadastro</a>
+    <a routerLink="/carrinho">🛒 Carrinho</a>
+    <a routerLink="/meus-pedidos">Meus pedidos</a>
+  </nav>
+
+  <div class="acesso-administrativo">
+    <span>Área administrativa</span>
+    <a routerLink="/login">Entrar</a>
+  </div>
+
+</header>
+
+<main>
+
+  <!-- BOTÃO VOLTAR -->
+  <div class="area-voltar">
+    <button
+      type="button"
+      class="btn-voltar"
+      routerLink="/cadastro-cliente">
+      ← Voltar
+    </button>
+  </div>
+
+  <!-- CARROSSEL -->
+  <section class="destaque">
+
+    <img
+      class="imagem-banner"
+      [src]="bannerAtual().imagem"
+      [alt]="bannerAtual().titulo"
+    />
+
+    <div class="fundo-banner"></div>
+
+    <button
+      class="seta-banner seta-esquerda"
+      type="button"
+      aria-label="Banner anterior"
+      (click)="bannerAnterior()">
+      ‹
+    </button>
+
+    <div class="texto-destaque">
+
+      <span class="etiqueta">
+        {{ bannerAtual().etiqueta }}
+      </span>
+
+      <h2>{{ bannerAtual().titulo }}</h2>
+
+      <p>{{ bannerAtual().descricao }}</p>
+
+      <a class="botao" href="#produtos">
+        Conheça nosso catálogo
+      </a>
+
+    </div>
+
+    <button
+      class="seta-banner seta-direita"
+      type="button"
+      aria-label="Próximo banner"
+      (click)="proximoBanner()">
+      ›
+    </button>
+
+  </section>
+
+  <!-- INDICADORES DO CARROSSEL -->
+  <div class="indicadores">
+
+    @for (banner of banners; track banner.titulo; let i = $index) {
+      <button
+        type="button"
+        [class.ativo]="indiceBanner() === i"
+        [attr.aria-label]="'Mostrar banner ' + (i + 1)"
+        (click)="selecionarBanner(i)">
+      </button>
+    }
+
+  </div>
+
+  <!-- CATÁLOGO -->
+  <section class="catalogo" id="produtos">
+
+    <div class="cabecalho-catalogo">
+      <span class="subtitulo">ESTÉTICA &amp; BEM-ESTAR</span>
+
+      <h2>Nosso Catálogo</h2>
+
+      <p>
+        Encontre produtos e serviços especiais para cuidar de você.
+      </p>
+    </div>
+
+    <!-- PESQUISA E FILTROS -->
+    <div class="filtros">
+
+      <input
+        type="search"
+        placeholder="Pesquisar produtos ou serviços..."
+        aria-label="Pesquisar produtos ou serviços"
+        [value]="pesquisa()"
+        (input)="atualizarPesquisa($event)"
+      />
+
+      <select
+        aria-label="Filtrar por categoria"
+        [value]="categoriaSelecionada()"
+        (change)="categoriaSelecionada.set($any($event.target).value)">
+
+        @for (categoria of categorias; track categoria) {
+          <option [value]="categoria">
+            {{ categoria }}
+          </option>
+        }
+
+      </select>
+
+      <select
+        aria-label="Filtrar por tipo"
+        [value]="tipoSelecionado()"
+        (change)="tipoSelecionado.set($any($event.target).value)">
+
+        @for (tipo of tipos; track tipo) {
+          <option [value]="tipo">
+            {{ tipo === 'Todos' ? 'Todos os tipos' : tipo }}
+          </option>
+        }
+
+      </select>
+
+    </div>
+
+    <!-- MENSAGEM DE RETORNO -->
+    @if (mensagem()) {
+      <p class="mensagem" role="status">
+        {{ mensagem() }}
+      </p>
+    }
+
+    <!-- QUANTIDADE DE RESULTADOS -->
+    <div class="resultado">
+      {{ itensFiltrados().length }} item(ns) encontrado(s)
+    </div>
+
+    <!-- PRODUTOS E SERVIÇOS -->
+    <div class="grade-produtos">
+
+      @for (item of itensFiltrados(); track item.id) {
+
+        <article class="card-produto">
+
+          <div class="imagem-produto">
+            <span>{{ item.icone }}</span>
+          </div>
+
+          <div class="informacoes-produto">
+
+            <span
+              class="tipo-item"
+              [class.servico]="item.tipo === 'SERVIÇO'">
+              {{ item.tipo }}
+            </span>
+
+            <h3>{{ item.nome }}</h3>
+
+            <p class="descricao">
+              {{ item.descricao }}
+            </p>
+
+            <span class="categoria">
+              {{ item.categoria }}
+            </span>
+
+            <p class="disponibilidade">
+              {{ item.disponibilidade }}
+            </p>
+
+            <div class="rodape-card">
+
+              <strong>
+                {{ formatarPreco(item.preco) }}
+              </strong>
+
+              <button
+                type="button"
+                (click)="adicionarAoCarrinho(item)">
+                Adicionar
+              </button>
+
+            </div>
+
+          </div>
+
+        </article>
+
+      } @empty {
+
+        <div class="sem-resultados">
+          <span>🌷</span>
+
+          <h3>Nenhum item encontrado</h3>
+
+          <p>
+            Tente pesquisar por outro nome ou categoria.
+          </p>
+        </div>
+
+      }
+
+    </div>
+
+  </section>
+
+</main>
+
+<!-- RODAPÉ -->
+<footer class="rodape">
+  <p>
+    Estética &amp; Bem-Estar · Cuidar de você faz bem.
+  </p>
+</footer>

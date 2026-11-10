@@ -1,0 +1,77 @@
+
+<div class="pagina-categorias">
+
+  <header class="cabecalho">
+    <h1>Gerenciamento de Categorias</h1>
+    <p>Cadastre e organize as categorias da loja.</p>
+  </header>
+
+  <section class="formulario">
+    <h2>{{ categoriaEditando !== null ? 'Editar Categoria' : 'Nova Categoria' }}</h2>
+
+    <form (ngSubmit)="salvar()">
+      <label for="nome">Nome da categoria</label>
+
+      <input
+        id="nome"
+        type="text"
+        name="nomeCategoria"
+        [(ngModel)]="nomeCategoria"
+        placeholder="Digite o nome da categoria"
+        required
+      >
+
+      <div class="acoes">
+        <button type="submit" class="btn-salvar">
+          {{ categoriaEditando !== null ? 'Atualizar' : 'Cadastrar' }}
+        </button>
+
+        <button type="button" class="btn-limpar" (click)="limpar()">
+          Limpar
+        </button>
+      </div>
+    </form>
+
+    <p class="sucesso" *ngIf="mensagem">{{ mensagem }}</p>
+    <p class="erro" *ngIf="erro">{{ erro }}</p>
+  </section>
+
+  <section class="lista">
+    <h2>Categorias cadastradas</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Categoria</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let categoria of categorias">
+          <td>{{ categoria.id }}</td>
+          <td>{{ categoria.nome }}</td>
+          <td class="botoes">
+            <button type="button" (click)="editar(categoria)">
+              Editar
+            </button>
+
+            <button
+              type="button"
+              class="btn-excluir"
+              (click)="excluir(categoria.id)"
+            >
+              Excluir
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="categorias.length === 0">
+          <td colspan="3">Nenhuma categoria cadastrada.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
