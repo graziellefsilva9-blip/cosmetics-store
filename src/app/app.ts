@@ -2,6 +2,7 @@
 import { Component, signal, computed } from '@angular/core';
 import { CadastroCliente } from './loja/cadastro-cliente/cadastro-cliente';
 import { ListarClientes } from './administrativo/clientes/listar-clientes';
+import { RouterOutlet } from '@angular/router';
 
 interface Produto {
   id: number;
@@ -17,7 +18,7 @@ interface Produto {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CadastroCliente, ListarClientes],
+  imports: [CadastroCliente, ListarClientes, RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

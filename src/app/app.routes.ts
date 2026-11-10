@@ -1,12 +1,14 @@
 
 import { Routes } from '@angular/router';
 
+
 export const routes: Routes = [
-  // Página inicial: por enquanto, direciona para o cadastro
+  // Página inicial da loja
   {
     path: '',
-    redirectTo: 'cadastro-cliente',
-    pathMatch: 'full'
+    loadComponent: () =>
+      import('./loja/inicio/inicio')
+        .then(m => m.Inicio)
   },
 
   // Cadastro de clientes
@@ -17,9 +19,9 @@ export const routes: Routes = [
         .then(m => m.CadastroCliente)
   },
 
-  // Caminho para páginas ainda não cadastradas
+  // Endereço não encontrado
   {
     path: '**',
-    redirectTo: 'cadastro-cliente'
+    redirectTo: ''
   }
 ];
