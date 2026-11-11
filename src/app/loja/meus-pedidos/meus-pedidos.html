@@ -24,26 +24,33 @@
       <input
         id="clienteId"
         type="number"
-        min="1"
-        placeholder="Digite seu ID de cliente"
         [value]="clienteId()"
-        (input)="clienteId.set($any($event.target).value)"
-        (keyup.enter)="consultarPedidos()"
+        readonly
       >
 
-      <button type="button" (click)="consultarPedidos()">
-        Consultar pedidos
+      <button
+        type="button"
+        (click)="consultarPedidos()"
+        [disabled]="carregando()"
+      >
+        {{ carregando() ? 'Consultando...' : 'Atualizar pedidos' }}
       </button>
     </div>
 
     <p class="aviso">
-      Informe seu ID de cliente para consultar somente os seus pedidos.
+      Seus pedidos são consultados automaticamente usando sua identificação.
     </p>
   </section>
 
   @if (mensagem()) {
     <div class="mensagem">
       {{ mensagem() }}
+    </div>
+  }
+
+  @if (carregando()) {
+    <div class="mensagem">
+      Carregando seus pedidos...
     </div>
   }
 
@@ -117,11 +124,12 @@
       <h3>Itens do pedido</h3>
 
       <div class="itens-pedido">
-        @for (item of pedido.itens; track $index) {
+        @for (item of pedido.itens; track item.idItem) {
           <div class="item-linha">
             <div>
               <strong>{{ item.nome }}</strong>
               <span>Quantidade: {{ item.quantidade }}</span>
+              <span>Valor unitário: {{ formatarPreco(item.preco) }}</span>
             </div>
 
             <strong>
@@ -138,11 +146,11 @@
     </section>
   }
 
-  @if (pesquisou() && pedidos().length === 0) {
+  @if (pesquisou() && !carregando() && pedidos().length === 0) {
     <section class="vazio">
       <span class="icone-vazio">♡</span>
       <h2>Nenhum pedido encontrado</h2>
-      <p>Confira o ID informado e tente novamente.</p>
+      <p>Você ainda não possui pedidos registrados.</p>
       <a routerLink="/catalogo">
         Conhecer produtos e serviços
       </a>

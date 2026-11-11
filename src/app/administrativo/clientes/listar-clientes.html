@@ -10,64 +10,122 @@
     <h3>Editar cliente</h3>
 
     <label>Nome:</label>
-    <input type="text" [(ngModel)]="clienteEditando.nome" name="nome">
+    <input
+      type="text"
+      [(ngModel)]="clienteEditando.nome"
+      name="nome">
 
     <label>CPF:</label>
-    <input type="number" [(ngModel)]="clienteEditando.cpf" name="cpf">
+    <input
+      type="number"
+      [(ngModel)]="clienteEditando.cpf"
+      name="cpf">
 
     <label>Data de nascimento:</label>
-    <input type="date" [(ngModel)]="clienteEditando.dataNascimento" name="dataNascimento">
+    <input
+      type="date"
+      [(ngModel)]="clienteEditando.dataNascimento"
+      name="dataNascimento">
 
     <label>Sexo:</label>
-    <input type="text" [(ngModel)]="clienteEditando.sexo" name="sexo">
+    <select
+      [(ngModel)]="clienteEditando.sexo"
+      name="sexo">
+      <option value="">Selecione</option>
+      <option value="F">Feminino</option>
+      <option value="M">Masculino</option>
+    </select>
 
     <label>E-mail:</label>
-    <input type="email" [(ngModel)]="clienteEditando.email" name="email">
+    <input
+      type="email"
+      [(ngModel)]="clienteEditando.email"
+      name="email">
 
     <label>Telefone:</label>
-    <input type="number" [(ngModel)]="clienteEditando.telefone" name="telefone">
+    <input
+      type="number"
+      [(ngModel)]="clienteEditando.telefone"
+      name="telefone">
 
-    <label>CEP:</label>
-    <input type="text" [(ngModel)]="clienteEditando.enderecos[0].cep" name="cep">
+    <!-- ENDEREÇO -->
+    <div *ngIf="clienteEditando.enderecos?.length">
 
-    <label>Número:</label>
-    <input type="text" [(ngModel)]="clienteEditando.enderecos[0].numero" name="numero">
+      <h4>Endereço</h4>
 
-    <label>Complemento:</label>
-    <input type="text" [(ngModel)]="clienteEditando.enderecos[0].complemento" name="complemento">
+      <label>CEP:</label>
+      <input
+        type="text"
+        [(ngModel)]="clienteEditando.enderecos[0].cep"
+        name="cep">
+
+      <label>Número:</label>
+      <input
+        type="text"
+        [(ngModel)]="clienteEditando.enderecos[0].numero"
+        name="numero">
+
+      <label>Complemento:</label>
+      <input
+        type="text"
+        [(ngModel)]="clienteEditando.enderecos[0].complemento"
+        name="complemento">
+
+    </div>
+
+    <label>Situação:</label>
+    <select
+      [(ngModel)]="clienteEditando.ativoPessoa"
+      name="ativoPessoa">
+      <option value="S">Ativo</option>
+      <option value="N">Inativo</option>
+    </select>
 
     <button
-    type="button"
-    class="btn-salvar"
-    (click)="salvarEdicao()">
-    Salvar alterações
-  </button>
-  
-  <button
-    type="button"
-    class="btn-cancelar"
-    (click)="cancelarEdicao()">
-    Cancelar
-  </button>
+      type="button"
+      class="btn-salvar"
+      (click)="salvarEdicao()">
+      Salvar alterações
+    </button>
+
+    <button
+      type="button"
+      class="btn-cancelar"
+      (click)="cancelarEdicao()">
+      Cancelar
+    </button>
 
   </div>
 
+  <!-- CARREGAMENTO -->
   <div *ngIf="carregando" class="mensagem">
     Carregando clientes...
   </div>
 
+  <!-- MENSAGEM DE SUCESSO -->
+  <div *ngIf="mensagem" class="mensagem">
+    {{ mensagem }}
+  </div>
+
+  <!-- MENSAGEM DE ERRO -->
   <div *ngIf="erro" class="mensagem erro">
     {{ erro }}
   </div>
 
-  <div *ngIf="!carregando && clientes.length === 0 && !erro"
-       class="mensagem">
+  <!-- LISTA VAZIA -->
+  <div
+    *ngIf="!carregando && clientes.length === 0 && !erro"
+    class="mensagem">
     Nenhum cliente cadastrado.
   </div>
 
-  <div class="tabela-container" *ngIf="clientes.length > 0">
+  <!-- TABELA DE CLIENTES -->
+  <div
+    class="tabela-container"
+    *ngIf="clientes.length > 0">
 
     <table>
+
       <thead>
         <tr>
           <th>ID</th>
@@ -81,15 +139,25 @@
       </thead>
 
       <tbody>
+
         <tr *ngFor="let cliente of clientes">
+
           <td>{{ cliente.idPessoa }}</td>
+
           <td>{{ cliente.nome }}</td>
+
           <td>{{ cliente.cpf }}</td>
+
           <td>{{ cliente.email }}</td>
+
           <td>{{ cliente.telefone }}</td>
-          <td>{{ cliente.ativoPessoa === 'S' ? 'Ativo' : 'Inativo' }}</td>
 
           <td>
+            {{ cliente.ativoPessoa === 'S' ? 'Ativo' : 'Inativo' }}
+          </td>
+
+          <td>
+
             <button
               type="button"
               class="btn-editar"
@@ -98,14 +166,18 @@
             </button>
 
             <button
-  type="button"
-  class="btn-excluir"
-  (click)="excluir(cliente.idPessoa!)">
-  Excluir
-</button>
+              type="button"
+              class="btn-excluir"
+              (click)="excluir(cliente.idPessoa!)">
+              Excluir
+            </button>
+
           </td>
+
         </tr>
+
       </tbody>
+
     </table>
 
   </div>

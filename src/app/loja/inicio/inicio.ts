@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import { Component } from '@angular/core';
-
-@Component({
-  imports: [],
-  selector: 'app-inicio',
-  styleUrl: './inicio.css',
-  templateUrl: './inicio.html',
-})
-export class Inicio {}
-=======
 import { Component, signal, computed } from '@angular/core';
 
 interface Produto {
@@ -200,4 +189,3 @@ export class Inicio {
     });
   }
 }
->>>>>>> 8c95618d4de5acf9bf3db783489b7f92d316ffb9

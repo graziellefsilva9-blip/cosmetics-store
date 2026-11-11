@@ -96,13 +96,17 @@
   <section class="catalogo" id="produtos">
 
     <div class="cabecalho-catalogo">
-      <span class="subtitulo">ESTÉTICA &amp; BEM-ESTAR</span>
+
+      <span class="subtitulo">
+        ESTÉTICA &amp; BEM-ESTAR
+      </span>
 
       <h2>Nosso Catálogo</h2>
 
       <p>
         Encontre produtos e serviços especiais para cuidar de você.
       </p>
+
     </div>
 
     <!-- PESQUISA E FILTROS -->
@@ -144,10 +148,93 @@
 
     </div>
 
+    <!-- CONSULTA DE ITEM POR ID -->
+    <div class="consulta-id">
+
+      <h3>Consultar produto ou serviço pelo ID</h3>
+
+      <div class="campo-consulta">
+
+        <input
+          type="number"
+          min="1"
+          placeholder="Digite o ID do item"
+          aria-label="ID do produto ou serviço"
+          [value]="idConsulta()"
+          (input)="atualizarIdConsulta($event)"
+        />
+
+        <button
+          type="button"
+          (click)="consultarPorId()"
+          [disabled]="consultando()">
+
+          {{ consultando() ? 'Consultando...' : 'Consultar' }}
+
+        </button>
+
+      </div>
+
+      @if (erroConsulta()) {
+        <p class="erro-consulta" role="alert">
+          {{ erroConsulta() }}
+        </p>
+      }
+
+      @if (itemConsultado(); as item) {
+
+        <article class="resultado-consulta">
+
+          <span class="icone-consulta">
+            {{ item.icone }}
+          </span>
+
+          <div class="informacoes-consulta">
+
+            <h4>{{ item.nome }}</h4>
+
+            <p>{{ item.descricao }}</p>
+
+            <p>ID: {{ item.id }}</p>
+
+            <p>Categoria: {{ item.categoria }}</p>
+
+            <p>Tipo: {{ item.tipo }}</p>
+
+            <strong>
+              {{ formatarPreco(item.preco) }}
+            </strong>
+
+          </div>
+
+          <button
+            type="button"
+            (click)="adicionarAoCarrinho(item)">
+            Adicionar ao carrinho
+          </button>
+
+        </article>
+
+      }
+
+    </div>
+
     <!-- MENSAGEM DE RETORNO -->
     @if (mensagem()) {
       <p class="mensagem" role="status">
         {{ mensagem() }}
+      </p>
+    }
+
+    @if (erro()) {
+      <p class="erro-consulta" role="alert">
+        {{ erro() }}
+      </p>
+    }
+
+    @if (carregando()) {
+      <p class="mensagem">
+        Carregando produtos e serviços...
       </p>
     }
 
@@ -209,15 +296,19 @@
 
       } @empty {
 
-        <div class="sem-resultados">
-          <span>🌷</span>
+        @if (!carregando()) {
+          <div class="sem-resultados">
 
-          <h3>Nenhum item encontrado</h3>
+            <span>🌷</span>
 
-          <p>
-            Tente pesquisar por outro nome ou categoria.
-          </p>
-        </div>
+            <h3>Nenhum item encontrado</h3>
+
+            <p>
+              Tente pesquisar por outro nome ou categoria.
+            </p>
+
+          </div>
+        }
 
       }
 
@@ -229,7 +320,9 @@
 
 <!-- RODAPÉ -->
 <footer class="rodape">
+
   <p>
     Estética &amp; Bem-Estar · Cuidar de você faz bem.
   </p>
+
 </footer>

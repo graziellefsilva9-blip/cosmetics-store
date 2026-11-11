@@ -103,9 +103,9 @@ export class ListarClientes implements OnInit {
 
       next: (resposta) => {
 
-        if (resposta && resposta.length > 0) {
+        if (resposta) {
 
-          this.clienteEditando = resposta[0];
+          this.clienteEditando = resposta;
 
           console.log(
             'CLIENTE PARA EDIÇÃO:',

@@ -10,10 +10,7 @@ import { Pessoa } from '../../models/pessoa.model';
 @Component({
   selector: 'app-cadastro-cliente',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
+  imports: [CommonModule, FormsModule],
   templateUrl: './cadastro-cliente.html',
   styleUrl: './cadastro-cliente.css'
 })
@@ -22,15 +19,14 @@ export class CadastroCliente {
   private readonly pessoaService = inject(PessoaService);
   private readonly router = inject(Router);
 
-  // DADOS DO CLIENTE
+  private readonly chaveCliente = 'cliente-estetica-id';
+
   pessoa: Pessoa = this.novaPessoa();
 
-  // MENSAGENS
   mensagem = '';
   erro = '';
   carregando = false;
 
-  // CRIAR OBJETO VAZIO
   private novaPessoa(): Pessoa {
     return {
       nome: '',
@@ -50,14 +46,11 @@ export class CadastroCliente {
     };
   }
 
-  // VOLTAR AO CATÁLOGO
   voltarAoCatalogo(): void {
     this.router.navigateByUrl('/catalogo');
   }
 
-  // SALVAR CLIENTE
   salvar(): void {
-
     this.mensagem = '';
     this.erro = '';
 
@@ -66,8 +59,13 @@ export class CadastroCliente {
       return;
     }
 
-    if (!this.pessoa.email.trim()) {
-      this.erro = 'Informe o e-mail.';
+    if (!this.pessoa.cpf || this.pessoa.cpf.toString().length !== 11) {
+      this.erro = 'Informe um CPF com 11 dígitos.';
+      return;
+    }
+
+    if (!this.pessoa.dataNascimento) {
+      this.erro = 'Informe a data de nascimento.';
       return;
     }
 
@@ -76,10 +74,27 @@ export class CadastroCliente {
       return;
     }
 
-    if (!this.pessoa.enderecos?.length ||
-        !this.pessoa.enderecos[0].cep ||
-        !this.pessoa.enderecos[0].numero) {
+    if (!this.pessoa.email.trim()) {
+      this.erro = 'Informe o e-mail.';
+      return;
+    }
+
+    if (!this.pessoa.telefone) {
+      this.erro = 'Informe o telefone.';
+      return;
+    }
+
+    if (
+      !this.pessoa.enderecos?.length ||
+      !this.pessoa.enderecos[0].cep.trim() ||
+      !this.pessoa.enderecos[0].numero.trim()
+    ) {
       this.erro = 'Preencha o CEP e o número do endereço.';
+      return;
+    }
+
+    if (!/^\d{8}$/.test(this.pessoa.enderecos[0].cep)) {
+      this.erro = 'O CEP deve conter 8 dígitos.';
       return;
     }
 
@@ -88,20 +103,55 @@ export class CadastroCliente {
     this.pessoaService.cadastrar(this.pessoa).subscribe({
 
       next: (resposta) => {
-        this.mensagem = 'Cliente cadastrado com sucesso!';
 
         console.log('Cliente cadastrado:', resposta);
 
-        this.pessoa = this.novaPessoa();
+        const idPessoa = Number(resposta.idPessoa);
+
+        if (!idPessoa || !Number.isInteger(idPessoa)) {
+          this.erro =
+            'Cadastro realizado, mas a API não retornou o ID do cliente. Verifique a resposta do backend.';
+
+          this.carregando = false;
+          return;
+        }
+
+        // Guardar o ID do cliente durante a sessão
+        sessionStorage.setItem(
+          this.chaveCliente,
+          idPessoa.toString()
+        );
+
+        this.mensagem = 'Cliente cadastrado com sucesso!';
+
         this.carregando = false;
+
+        // Direcionar para o catálogo
+        this.router.navigateByUrl('/catalogo');
       },
 
       error: (erro) => {
+
         console.error('Erro ao cadastrar cliente:', erro);
 
-        this.erro =
-          erro?.error?.message ||
-          'Não foi possível cadastrar o cliente. Verifique os dados e tente novamente.';
+        if (erro.status === 0) {
+          this.erro =
+            'Não foi possível conectar à API. Verifique se o backend está em execução.';
+
+        } else if (erro.status === 400) {
+          this.erro =
+            'Dados inválidos. Confira os campos preenchidos.';
+
+        } else if (erro.status === 409) {
+          this.erro =
+            'CPF ou e-mail já cadastrado.';
+
+        } else {
+          this.erro =
+            erro?.error?.message ||
+            erro?.error?.title ||
+            'Ocorreu um erro ao cadastrar o cliente.';
+        }
 
         this.carregando = false;
       }
@@ -109,11 +159,9 @@ export class CadastroCliente {
     });
   }
 
-  // LIMPAR FORMULÁRIO
   limpar(): void {
     this.pessoa = this.novaPessoa();
     this.mensagem = '';
     this.erro = '';
   }
-
 }

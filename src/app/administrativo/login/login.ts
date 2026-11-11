@@ -11,10 +11,6 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class Login {
 
-  // Endpoint previsto para integração futura:
-  // POST https://localhost:7030/api/funcionarios/login
-  private readonly apiUrl = 'https://localhost:7030/api/funcionarios/login';
-
   email = signal('');
   senha = signal('');
   mensagem = signal('');
@@ -23,6 +19,7 @@ export class Login {
   constructor(private router: Router) {}
 
   entrar(): void {
+
     const email = this.email().trim();
     const senha = this.senha().trim();
 
@@ -36,11 +33,10 @@ export class Login {
       return;
     }
 
-    // Login demonstrativo. A autenticação real será feita pela API.
-    this.mostrarMensagem(
-      'A autenticação será habilitada na integração com a API.',
-      'erro'
-    );
+    // ACESSO TEMPORÁRIO PARA TESTES
+    this.mostrarMensagem('Acesso administrativo liberado!', 'sucesso');
+
+    this.router.navigateByUrl('/administrativo/dashboard');
   }
 
   private mostrarMensagem(
