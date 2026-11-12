@@ -1,9 +1,12 @@
 
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-interface Categoria {
+import { CategoriaService } from '../../core/services/categoria.service';
+import { Categoria as CategoriaAPI } from '../../models/categoria.model';
+
+interface CategoriaTela {
   id: number;
   nome: string;
 }
@@ -15,20 +18,45 @@ interface Categoria {
   templateUrl: './categorias.html',
   styleUrl: './categorias.css'
 })
-export class Categorias {
+export class Categorias implements OnInit {
+  private cdr = inject(ChangeDetectorRef);
 
-  categorias: Categoria[] = [
-    { id: 1, nome: 'Cuidados com a Pele' },
-    { id: 2, nome: 'Higiene Pessoal' },
-    { id: 3, nome: 'Cosméticos' },
-    { id: 4, nome: 'Serviços Estéticos' },
-    { id: 5, nome: 'Bem-Estar' }
-  ];
+  private categoriaService = inject(CategoriaService);
+
+
+  categorias: CategoriaTela[] = [];
 
   nomeCategoria = '';
   categoriaEditando: number | null = null;
   mensagem = '';
   erro = '';
+
+  ngOnInit(): void {
+    this.carregarCategorias();
+  }
+
+  // Buscar categorias no banco de dados pela API
+ 
+carregarCategorias(): void {
+  this.categoriaService.listar().subscribe({
+    next: (dados) => {
+      console.log('Categorias recebidas da API:', dados);
+
+      this.categorias = dados.map(c => ({
+        id: c.idcategoria!,
+        nome: c.categoria
+      }));
+
+      this.cdr.detectChanges();
+    },
+    error: (err) => {
+      console.error('Erro ao carregar categorias:', err);
+      this.erro = 'Não foi possível carregar as categorias.';
+      this.cdr.detectChanges();
+    }
+  });
+}
+
 
   salvar(): void {
     this.mensagem = '';
@@ -51,31 +79,44 @@ export class Categorias {
       return;
     }
 
+    const categoriaAPI: CategoriaAPI = {
+      categoria: nome
+    };
+
     if (this.categoriaEditando !== null) {
-      const categoria = this.categorias.find(
-        c => c.id === this.categoriaEditando
-      );
+      categoriaAPI.idcategoria = this.categoriaEditando;
 
-      if (categoria) {
-        categoria.nome = nome;
-      }
-
-      this.mensagem = 'Categoria atualizada com sucesso!';
-    } else {
-      const novoId = Math.max(0, ...this.categorias.map(c => c.id)) + 1;
-
-      this.categorias.push({
-        id: novoId,
-        nome
+      this.categoriaService.atualizar(
+        this.categoriaEditando,
+        categoriaAPI
+      ).subscribe({
+        next: () => {
+          this.mensagem = 'Categoria atualizada com sucesso!';
+          this.limpar();
+          this.carregarCategorias();
+        },
+        error: (err) => {
+          console.error('Erro ao atualizar categoria:', err);
+          this.erro = 'Não foi possível atualizar a categoria.';
+        }
       });
 
-      this.mensagem = 'Categoria cadastrada com sucesso!';
+    } else {
+      this.categoriaService.cadastrar(categoriaAPI).subscribe({
+        next: () => {
+          this.mensagem = 'Categoria cadastrada com sucesso!';
+          this.limpar();
+          this.carregarCategorias();
+        },
+        error: (err) => {
+          console.error('Erro ao cadastrar categoria:', err);
+          this.erro = 'Não foi possível cadastrar a categoria.';
+        }
+      });
     }
-
-    this.limpar();
   }
 
-  editar(categoria: Categoria): void {
+  editar(categoria: CategoriaTela): void {
     this.nomeCategoria = categoria.nome;
     this.categoriaEditando = categoria.id;
     this.mensagem = '';
@@ -83,9 +124,25 @@ export class Categorias {
   }
 
   excluir(id: number): void {
-    this.categorias = this.categorias.filter(c => c.id !== id);
-    this.mensagem = 'Categoria removida da lista.';
-    this.limpar();
+    this.mensagem = '';
+    this.erro = '';
+
+    this.categoriaService.excluir(id).subscribe({
+      next: () => {
+        this.mensagem = 'Categoria excluída com sucesso!';
+        this.limpar();
+        this.carregarCategorias();
+      },
+      error: (err) => {
+        console.error('Erro ao excluir categoria:', err);
+
+        if (err.status === 409 || err.status === 400) {
+          this.erro = 'Não foi possível excluir. Verifique se existem itens vinculados a esta categoria.';
+        } else {
+          this.erro = 'Erro ao excluir categoria.';
+        }
+      }
+    });
   }
 
   limpar(): void {

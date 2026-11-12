@@ -100,7 +100,6 @@ export const routes: Routes = [
         .then(m => m.EntradaProdutosComponent)
   },
 
-  // DEVE SER SEMPRE A ÚLTIMA ROTA
   {
     path: '**',
     redirectTo: 'cadastro-cliente'
